@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Soduko puzzle game (javascript, html5)</title>
+    <meta charset="UTF-8" />
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><![endif]-->
+    <meta name="Author" content="Yair Even-Or" />
+    <meta name="description" content="A Sudoku puzzle game written in Javascript & HTML5 using the Dancing Links algorithm" />
+    <meta name="keywords" content="sudoku, soduko, sudoku javascript, sudoku online, sudoku dancing links, sudoku dlx, sudoku jquery, sudoku game, sudoku html5. sudoku puzzle" />
+    <!--<meta name="HandheldFriendly" content="true" />-->
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" href="styles.css" media="all" />
+    <!--[if IE]>
+      <style>
+        #options_advanced button.save,
+        #options_advanced button.load{ display:none; }
+        .hideCells .box > * > * > td span{ transform:none !important; opacity:1 !important; }
+        .level li{ padding:6px 11px 4px 11px; }
+        .num_select{ display:none; }
+        .num_select.show{ display:block; }
+      </style>
+    <![endif]-->
+    <!--[if lt IE 9]>
+      <style>body *{display:none} .ieOnly{display:block;text-align:center;padding:50px;font-size:2em;} .ieOnly *{display:inline}</style>
+    <![endif]-->
+    <script>
+      if( 'ontouchend' in document )
+        document.documentElement.className = 'touch';
+    </script>
+  </head>
+  <body class='game'>
+    <div id="topStrip">
+      <h1 title='or similar product'>Sudoku</h1>
+      <div id="options_advanced">
+        <button class='save' title='save your game'>save</button>
+        <button class='load' title='loads the last game saved'>load</button>
+        <button class='import' title='import a game'>import</button>
+        <button class='export' title='export this game'>export</button>
+        <button class='share' title='share this board as link'>share</button>
+      </div>
+    </div>
+    <div>
+      <header id='header'>
+        <div class='output'>
+          <ul class='level'>
+            <li>very easy</li>
+            <li>easy</li>
+            <li>medium</li>
+            <li>tough</li>
+            <li>very tough</li>
+            <li>extreme</li>
+          </ul>
+        </div>
+      </header>
+      <div class='outterWrap'>
+        <div id="board_cont"><div class='contwrap'></div></div>
+      </div>
+      <div id="options">
+        <button class='undo'>undo</button>
+        <button class='restart' title='restart current game'>restart</button>
+        <button class='new' title='play a new game'>new game</button>
+        <button class='notes' title='show/hide all notes'><b></b>all notes</button>
+        <button class='note' title='enable/disable user notes'><b></b>note</button>
+        <button class='clearNotes' title='clear notes from the board'>clear notes</button>
+      </div>
+    </div>
+    <footer>
+      <section>
+        <hgroup>
+          <h2>How To Play</h2>
+        </hgroup>
+        <ul>
+          <li>Select difficulty level by clicking the text next to the big red title "Sudoku"</li>
+          <li>Fill cells with numbers from 1 to 9</li>
+          <li title='when mouse is over a cell'>Pick a number by clicking a cell (with the mouse) or a keyboad [1-9] key</li>
+          <li title='when mouse is over a cell'>Delete a number by clicking a cell's (x) button or pressing the 'Delete' key while mouse is over a cell</li>
+          <li>The board has 9 regions, each has 9 cells</li>
+          <li>Rule 1 - each Region consist of unique numbers (1-9)</li>
+          <li>Rule 2 - each Row of the board consist of unique numbers (1-9)</li>
+          <li>Rule 3 - each Column of the board consist of unique numbers (1-9)</li>
+        </ul>
+        <div>
+          <a href="http://homepages.cwi.nl/~aeb/games/sudoku/solving1.html" target="_blank">Basic methods</a>,
+          <a href="http://homepages.cwi.nl/~aeb/games/sudoku/" target="_blank">More methods</a>
+        </div>
+      </section>
+      <section>
+        <hgroup>
+          <h2>What's happening here</h2>
+        </hgroup>
+        <ul>
+          <li>Empty board is generated</li>
+          <li>Board is populated with numbers until it's a valid Sudoku game</li>
+          <li>Numbers are removed from each cell (and the mirror-cell)</li>
+          <li>Board is solved (using <a href="http://en.wikipedia.org/wiki/Dancing_Links" target="_blank">DLX</a>) for a single solution after each remove</li>
+          <li>Try to remove as much numbers as possible</li>
+          <li>Board is being re-solved using human-like logic to determine it's level</li>
+          <li>While all this is happening, a pre-rendered board is dislpayed</li>
+          <li>The game keeps generating new boards in the background using Web-Workes</li>
+        </ul>
+        <a href="documentation.html">Documentation</a>
+      </section>
+      <section>
+        <hgroup>
+          <h2>Sudoku Boring Facts</h2>
+        </hgroup>
+        <ul>
+          <li>Sudoku origin is not from Asia</li>
+          <li>The first modern Sudoku game was published at 1979</li>
+          <li>An Indiana 74-y/o retired architect &amp; freelance puzzle maker created it</li>
+          <li>"Sūji wa dokushin ni kagiru" was introduced in Japan in April 1984</li>
+          <li>The name sucked, so the Japs changed it to "Sudoku"</li>
+          <li>You should only play board games when you're bored</li>
+        </ul>
+      </section>
+      <section class="credits">
+        <span>2011 &copy; </span><a href='mailto:vsync.design@gmail.com' title='drop me a line'>Yair Even Or</a> • <a href='http://dropthebit.com'>Dropthebit.com</a>
+        <p>(Do not copy or use this code without my persmission)</p>
+        <!--<span>Beta demo for my <a href='connect4.htm'>connect4 game</a></span>-->
+      </section>
+    </footer>
+    <!--[if lt IE 9]>
+      <script type="text/javascript">
+        var ff = "Firefox".link("http://www.mozilla.com"), chrome = "Chrome".link("http://www.google.com/chrome/");
+        document.getElementsByTagName('body')[0].innerHTML = '<div class="ieOnly">you are using an absolete browser, please use '+ ff +' or '+ chrome +'</div>'
+      </script>
+    <![endif]-->
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+    <script src='js/jq.extentions.gz.js'></script>
+    <script src='js/DLX.js'></script>
+    <script src='js/sudoku.v2.6.min.js'></script>
+    <script src='js/board.games.js'></script>
+    <script>
+      // load the Sudoku game into this container
+      board.init( $('#board_cont > div') );
+      // lazy load the Faceook LIKE button
+      setTimeout(function(){
+        var iframeHTML = '<iframe class="fbLike" src="http://www.facebook.com/plugins/like.php?app_id=161427850590911&amp;href=http%3A%2F%2Fwww.sudokubum.com&amp;send=false&amp;layout=button_count&amp;width=370&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21"></iframe>';
+        $('.credits').before(iframeHTML);
+      },500);
+    </script>
+    <script>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-24026865-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+      })();
+    </script>
+  </body>
+</html>
